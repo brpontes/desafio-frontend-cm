@@ -19,8 +19,12 @@
           <td>{{ product.descricao }}</td>
           <td>{{ sectionDescriptionById(product.secao_id) }}</td>
           <td align="center" class="actions-cell">
-            <eva-icon name="edit" title="Editar Produto"></eva-icon>
-            <eva-icon name="trash-2" title="Remover Produto"></eva-icon>
+            <button type="button">
+              <eva-icon name="edit" title="Editar Produto"></eva-icon>
+            </button>
+            <button type="button">
+              <eva-icon name="trash-2" title="Remover Produto"></eva-icon>
+            </button>
           </td>
         </tr>
       </tbody>
@@ -56,15 +60,25 @@ export default {
     width: 100%
     margin: 10px 0
     thead
-      background-color: lighten(#ccc, 18%)
       th
         padding: 10px
+        font-weight: bold
+        color: #000
     tbody
       tr td
         padding: 10px
-    .actions-cell > i
+    .actions-cell > button
       cursor: pointer
       margin: 0 10px
+      padding: 3px 7px
+      border-radius: $border-radius
+      border: none
+      background-color: $bg-secondary
+      span
+        margin: 0 10px
+      &:hover
+        background-color: $bg-primary
+        color: $bg-secondary
   
   .empty-table
     display: flex
