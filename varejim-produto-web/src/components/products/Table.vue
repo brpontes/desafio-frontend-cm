@@ -19,10 +19,12 @@
           <td>{{ product.descricao }}</td>
           <td>{{ sectionDescriptionById(product.secao_id) }}</td>
           <td align="center" class="actions-cell">
-            <button type="button">
-              <eva-icon name="edit" title="Editar Produto"></eva-icon>
-            </button>
-            <button type="button">
+            <router-link :to="`/product/${product.id}/edit`">
+              <button type="button">
+                  <eva-icon name="edit" title="Editar Produto"></eva-icon>
+              </button>
+            </router-link>
+            <button type="button" @click="promptRemoveProduct">
               <eva-icon name="trash-2" title="Remover Produto"></eva-icon>
             </button>
           </td>
@@ -50,6 +52,25 @@ export default {
       return this.sections.length > 0
         ? this.sections.find(section => section.id === section_id).descricao
         : '-';
+    },
+    promptRemoveProduct() {
+      this.$swal({
+        title: "Deseja remover este produto?",
+        icon: "warning",
+        buttons: {
+          remove: 'Ok',
+          cancel: 'Cancelar'
+        }
+      })
+        .then(isConfirmed => {
+          if (isConfirmed) {
+            this.$swal("Poof! Your imaginary file has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            this.$swal("Your imaginary file is safe!");
+          }
+        });
     }
   }
 };
@@ -67,6 +88,7 @@ export default {
     tbody
       tr td
         padding: 10px
+    .actions-cell > a button,
     .actions-cell > button
       cursor: pointer
       margin: 0 10px

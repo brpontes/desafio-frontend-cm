@@ -9,7 +9,12 @@ export default new Vuex.Store({
     sections: [],
     products: [],
     filter_section: "",
-    filter: ""
+    filter: "",
+    form: {
+      id: "",
+      descricao: "",
+      secao_id: ""
+    }
   },
   mutations: {
     SET_PAGINATION(state, pagination) {
@@ -26,6 +31,9 @@ export default new Vuex.Store({
     },
     SET_FILTER_SECTION(state, filter_section) {
       state.filter_section = filter_section;
+    },
+    SET_FORM_EDIT(state, id) {
+      state.form = state.products.length > 0 ? state.products.find(product => product.id === id) : state.form;
     }
   },
   actions: {
@@ -51,6 +59,9 @@ export default new Vuex.Store({
     },
     set_filter_section({ commit }, filter_section) {
       commit("SET_FILTER_SECTION", filter_section);
+    },
+    async set_form_edit({ commit }, id) {
+      commit("SET_FORM_EDIT", id);
     }
   },
   getters: {
@@ -58,6 +69,9 @@ export default new Vuex.Store({
       return state.products
         .filter(product => state.filter_section === "" || product.secao_id === state.filter_section)
         .filter(product => state.filter.length > 0 ? product.id.toString().indexOf(state.filter) !== -1 : product);
+    },
+    get_product_by_id: state => id => {
+      return state.products.find(product => product.id === id);
     }
   },
   modules: {}

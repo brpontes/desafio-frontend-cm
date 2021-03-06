@@ -55,8 +55,8 @@ export default {
     color: darken($bg-primary, 15%)
     cursor: pointer
     &:hover
-      background-color: lighten($bg-primary, 10%)
-      border: 1px solid lighten($bg-primary, 10%)
+      background-color: $bg-tertiary
+      border: 1px solid $bg-tertiary
       color: $bg-secondary  
   
   .active
