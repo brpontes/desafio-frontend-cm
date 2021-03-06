@@ -55,12 +55,9 @@ export default new Vuex.Store({
   },
   getters: {
     get_products: state => {
-      const filtered_products_by_section_id = state.products
-        .filter(product => state.filter_section === "" || product.secao_id === state.filter_section);
-
-      return state.filter.length === 0
-        ? filtered_products_by_section_id
-        : filtered_products_by_section_id.filter(product => product.id.toString().indexOf(state.filter) !== -1);
+      return state.products
+        .filter(product => state.filter_section === "" || product.secao_id === state.filter_section)
+        .filter(product => state.filter.length > 0 ? product.id.toString().indexOf(state.filter) !== -1 : product);
     }
   },
   modules: {}
