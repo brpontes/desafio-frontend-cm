@@ -3,17 +3,20 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: 'ProductCounter',
   props: {
     products: {
       type: Array,
       default: () => []
-    },
-    pagination: {
-      type: Object,
-      default: () => {}
     }
+  },
+  computed: {
+    ...mapState({
+      pagination: state => state.pagination
+    })
   }
 }
 </script>
