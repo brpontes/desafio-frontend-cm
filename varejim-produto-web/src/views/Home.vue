@@ -30,9 +30,3 @@ export default {
   }
 };
 </script>
-
-<style lang="sass">
-  .container
-    width: 992px
-    margin: 0 auto
-</style>

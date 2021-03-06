@@ -31,7 +31,7 @@ export default {
   .filter
     width: 100%
     padding: 10px
-    height: 30px
+    height: 50px
     background: $bg-secondary
     border: 1px solid #ccc
     border-radius: $border-radius
