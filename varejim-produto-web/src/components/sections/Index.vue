@@ -57,7 +57,7 @@ export default {
     &:hover
       background-color: $bg-tertiary
       border: 1px solid $bg-tertiary
-      color: $bg-secondary  
+      color: $bg-secondary
   
   .active
     background-color: $bg-primary

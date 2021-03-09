@@ -2,8 +2,11 @@
   <div id="app">
     <header>
       <div id="nav">
-        <router-link to="/">Início</router-link>
-        <router-link to="/product/add">Cadastrar Produto</router-link>
+        <div id="logo"></div>
+        <nav>
+          <router-link to="/">Início</router-link>
+          <router-link to="/product/add">Cadastrar Produto</router-link>
+        </nav>
       </div>
     </header>
     <router-view />
@@ -18,7 +21,6 @@ export default {
     ...mapActions(['set_products', 'set_sections'])
   },
   async created() {
-    await this.set_products()
     await this.set_sections()
   }
 }
@@ -38,17 +40,22 @@ export default {
   header
     background: $bg-primary
     height: 60px
-    line-height: 60px
+    align-items: center
     width: 100%
     #nav
       width: $container-width
       margin: 0 auto
       display: flex
-      justify-content: flex-end
-      a
+      justify-content: space-between
+      #logo
+        width: 150px
+        background: url('./assets/logo.png') no-repeat
+        background-size: contain
+      nav a
         text-decoration: none
+        padding: 10px 20px
+        border-radius: $border-radius
         color: $bg-secondary
-        padding: 0 20px
         &:hover
           background: $bg-tertiary
 </style>

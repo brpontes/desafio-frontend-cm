@@ -8,24 +8,24 @@
       </div>
       <div>
         <label for="codigo">Nome do Produto</label>
-        <input v-model="form.name" type="text" id="codigo" name="codigo" />
+        <input v-model="form.descricao" type="text" id="codigo" name="codigo" />
       </div>
       <div>
         <label for="codigo">Seção</label>
-        <select v-model="form.section">
+        <select v-model="form.secao_id">
           <option></option>
           <option v-for="section in sections" :key="section.id" :value="section.id">{{section.descricao}}</option>
         </select>
       </div>
       <div>
-        <button type="button">Cadastrar</button>
+        <button type="button" @click="save">Cadastrar</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: 'AddProduct',
@@ -33,8 +33,8 @@ export default {
     return {
       form: {
         id: '',
-        name: '',
-        section: ''
+        descricao: '',
+        secao_id: ''
       }
     };
   },
@@ -42,6 +42,18 @@ export default {
     ...mapState({
       sections: state => state.sections
     })
+  },
+  methods: {
+    ...mapActions(['add_product']),
+    save() {
+      this.add_product(this.form);
+      this.$swal("Produto cadastrado com sucesso", "", "success")
+      .then((isConfirmed) => {
+        if (isConfirmed) {
+          this.$router.push('/');
+        }
+      });
+    }
   }
 }
 </script>
@@ -66,12 +78,12 @@ export default {
         padding: 10px
         outline: none
       button
-        background-color: $bg-tertiary
+        background-color: $bg-success
         color: $bg-secondary
         font-size: 1.2em
         border-radius: $border-radius
         border: none
         cursor: pointer
         &:hover
-          background-color: lighten($bg-tertiary, 10%)
+          background-color: darken($bg-success, 10%)
 </style>

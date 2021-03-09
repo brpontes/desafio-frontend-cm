@@ -24,19 +24,26 @@
                   <eva-icon name="edit" title="Editar Produto"></eva-icon>
               </button>
             </router-link>
-            <button type="button" @click="promptRemoveProduct">
+            <button type="button" @click="promptRemoveProduct(product.id)">
               <eva-icon name="trash-2" title="Remover Produto"></eva-icon>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+    <ProductPagination />
   </section>
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+import ProductPagination from "@/components/products/Pagination"
+
 export default {
   name: "ProductTable",
+  components: {
+    ProductPagination
+  },
   props: {
     products: {
       type: Array,
@@ -47,13 +54,19 @@ export default {
       default: () => []
     }
   },
+  computed: {
+    ...mapState({
+      pagination: state => state.pagination
+    })
+  },
   methods: {
+    ...mapActions(['delete_product']),
     sectionDescriptionById(section_id) {
       return this.sections.length > 0
         ? this.sections.find(section => section.id === section_id).descricao
         : '-';
     },
-    promptRemoveProduct() {
+    promptRemoveProduct(id) {
       this.$swal({
         title: "Deseja remover este produto?",
         icon: "warning",
@@ -62,13 +75,15 @@ export default {
           cancel: 'Cancelar'
         }
       })
-        .then(isConfirmed => {
+        .then(async isConfirmed => {
           if (isConfirmed) {
-            this.$swal("Poof! Your imaginary file has been deleted!", {
-              icon: "success",
-            });
-          } else {
-            this.$swal("Your imaginary file is safe!");
+            const wasDeleted = await this.delete_product(id);
+            const swal_lookup = {
+              true: { "title": "Produto removido com sucesso", "icon": "success" },
+              false: { "title": "Não foi possível remover o produto", "icon": "warning" }
+            }
+            const swalOptions = swal_lookup[wasDeleted.ok];
+            this.$swal(swalOptions.title, { icon: swalOptions.icon });
           }
         });
     }

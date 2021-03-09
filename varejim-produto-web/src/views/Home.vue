@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import Sections from "@/components/sections/Index";
 import FilterInput from "@/components/filter/Input";
 import ProductCounter from "@/components/products/Counter";
@@ -25,8 +25,15 @@ export default {
   computed: {
     ...mapGetters(['get_products']),
     ...mapState({
-      sections: state => state.sections,
+      sections: state => state.sections
     })
+  },
+  methods: {
+    ...mapActions(['set_products'])
+  },
+  mounted() {
+    const page = this.$route.params.page || "1"
+    this.set_products(page)
   }
 };
 </script>

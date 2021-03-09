@@ -4,7 +4,7 @@
     <form>
       <div>
         <label for="codigo">Código</label>
-        <input v-model="form.id" type="text" id="codigo" name="codigo" />
+        <input disabled="disabled" v-model="form.id" type="text" id="codigo" name="codigo" />
       </div>
       <div>
         <label for="codigo">Nome do Produto</label>
@@ -17,8 +17,9 @@
           <option v-for="section in sections" :key="section.id" :value="section.id">{{section.descricao}}</option>
         </select>
       </div>
-      <div>
-        <button type="button">Cadastrar</button>
+      <div class="btn-group">
+        <button type="button" class="danger-bg">Excluir</button>
+        <button type="button" class="success-bg" @click="save">Salvar</button>
       </div>
     </form>
   </div>
@@ -29,9 +30,6 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   name: 'EditProduct',
-  data() {
-    return {};
-  },
   computed: {
     ...mapState({
       sections: state => state.sections,
@@ -39,10 +37,15 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['set_products', 'set_form_edit'])
+    ...mapActions(['get_product_by_id', 'edit_product']),
+    save() {
+      this.edit_product();
+      this.$swal("Produto salvo com sucesso", "", "success");
+      this.$router.push('/');
+    }
   },
   async mounted() {
-    this.set_form_edit(parseInt(this.$route.params.id))
+    this.get_product_by_id(parseInt(this.$route.params.id))
   }
 }
 </script>
@@ -67,12 +70,22 @@ export default {
         padding: 10px
         outline: none
       button
-        background-color: $bg-tertiary
         color: $bg-secondary
         font-size: 1.2em
         border-radius: $border-radius
         border: none
         cursor: pointer
-        &:hover
-          background-color: lighten($bg-tertiary, 10%)
+    .btn-group
+      display: flex
+      justify-content: space-between
+      button
+        width: 48%
+    .danger-bg
+      background-color: $bg-danger
+      &:hover
+          background-color: darken($bg-danger, 10%)
+    .success-bg
+      background-color: $bg-success
+      &:hover
+          background-color: darken($bg-success, 10%)
 </style>
