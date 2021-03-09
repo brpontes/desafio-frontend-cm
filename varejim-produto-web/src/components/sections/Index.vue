@@ -1,10 +1,19 @@
 <template>
-  <nav>
-    <ul>
-      <li @click="filterBySectionCod('')" class="badge active">Todos</li>
-      <li @click="filterBySectionCod(section.id)" class="badge" v-for="section in sections" :key="section.id">{{section.descricao}}</li>
-    </ul>
-  </nav>
+  <div id="sections">
+    <nav>
+      <ul>
+        <li @click="filterBySectionCod('')" class="badge active">Todos</li>
+        <li @click="filterBySectionCod(section.id)" class="badge" v-for="section in sections" :key="section.id">{{section.descricao}}</li>
+      </ul>
+    </nav>
+    <label id="select-section">
+      Filtrar por:
+      <select>
+        <option @click="filterBySectionCod('')">Todos</option>
+        <option v-for="section in sections" :key="section.id" @click="filterBySectionCod(section.id)">{{section.descricao}}</option>
+      </select>
+    </label>
+  </div>
 </template>
 
 <script>
@@ -39,12 +48,28 @@ export default {
 </script>
 
 <style lang="sass">
-  nav
+  #sections > nav
+    @media (max-width: 1024px)
+      display: none
     margin: 20px 0
     ul
       display: flex
       justify-content: center
       list-style-type: none
+  
+  #select-section
+    display: none
+    @media (max-width: 1024px)
+      display: block
+    select
+      width: 100%
+      padding: 10px
+      height: 50px
+      background: darken($bg-secondary, 10%)
+      border: 1px solid #ccc
+      border-radius: $border-radius
+      margin: 10px 0
+      outline: none
   
   .badge
     margin: 0 20px

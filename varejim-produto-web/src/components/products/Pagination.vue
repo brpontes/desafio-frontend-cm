@@ -38,7 +38,7 @@ export default {
 
 <style lang="sass" scoped>
   .pagination
-    width: $container-width
+    max-width: $container-width
     margin: 30px auto
     ul
       display: flex

@@ -30,6 +30,7 @@ export default {
 <style lang="sass" scoped>
   .filter
     width: 100%
+    box-sizing: border-box;
     padding: 10px
     height: 50px
     background: darken($bg-secondary, 10%)
