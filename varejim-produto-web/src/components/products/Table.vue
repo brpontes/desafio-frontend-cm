@@ -110,7 +110,7 @@ export default {
       padding: 3px 7px
       border-radius: $border-radius
       border: none
-      background-color: $bg-secondary
+      background-color: darken($bg-secondary, 10%)
       span
         margin: 0 10px
       &:hover

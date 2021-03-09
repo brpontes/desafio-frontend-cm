@@ -32,7 +32,7 @@ export default {
     width: 100%
     padding: 10px
     height: 50px
-    background: $bg-secondary
+    background: darken($bg-secondary, 10%)
     border: 1px solid #ccc
     border-radius: $border-radius
     margin: 10px 0
