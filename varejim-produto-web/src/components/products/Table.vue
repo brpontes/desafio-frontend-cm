@@ -77,13 +77,8 @@ export default {
       })
         .then(async isConfirmed => {
           if (isConfirmed) {
-            const wasDeleted = await this.delete_product(id);
-            const swal_lookup = {
-              true: { "title": "Produto removido com sucesso", "icon": "success" },
-              false: { "title": "Não foi possível remover o produto", "icon": "warning" }
-            }
-            const swalOptions = swal_lookup[wasDeleted.ok];
-            this.$swal(swalOptions.title, { icon: swalOptions.icon });
+            await this.delete_product(id);
+            this.$swal("Produto removido com sucesso", { icon: "success" });
           }
         });
     }

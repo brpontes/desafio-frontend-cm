@@ -23,10 +23,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['set_active_page', 'set_pagination_start']),
+    ...mapActions(['set_active_page', 'set_products']),
     redirect(page) {
       this.set_active_page(page);
-      this.set_pagination_start(page);
+      this.set_products(page);
     }
   },
   mounted() {

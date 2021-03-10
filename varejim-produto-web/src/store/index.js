@@ -1,5 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { getProducts, getProductById, addProduct, editProductById, deleteProductById } from "@/api/products";
+import { getSections } from "@/api/sections";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -46,33 +49,33 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    set_products({ commit, state }, page) {
-      const start = (page - 1) * state.pagination.limit
-      fetch(`http://localhost:3000/produtos?start=${start}`)
-        .then(async response => {
-          const { start, limit, total, items } = await response.json();
-          commit("SET_PRODUCTS", items);
-          commit("SET_PAGINATION", { start, limit, total });
-        })
-        .catch(error => console.log(error));
+    async set_products({ commit, state }, page) {
+      const startRow = (page - 1) * state.pagination.limit;
+      const { start, limit, total, items } = await getProducts(startRow);
+      commit("SET_PRODUCTS", items);
+      commit("SET_PAGINATION", { start, limit, total });
     },
-    set_sections({ commit }) {
-      fetch("http://localhost:3000/secoes")
-        .then(async response => {
-          const { items } = await response.json();
-          commit("SET_SECTIONS", items);
-        })
-        .catch(error => console.log(error));
+    async get_product_by_id({ commit }, id) {
+      const data = await getProductById(id);
+      commit("SET_FORM_EDIT", data);
     },
-    set_pagination_start({ commit, state }, page) {
-      const start = (page - 1) * state.pagination.limit
-      fetch(`http://localhost:3000/produtos?start=${start}`)
-        .then(async response => {
-          const { start, limit, total, items } = await response.json();
-          commit("SET_PRODUCTS", items);
-          commit("SET_PAGINATION", { start, limit, total });
-        })
-        .catch(error => console.log(error));
+    async add_product({ commit, state, dispatch }, product) {
+      await addProduct(product);
+      commit("SET_ACTIVE_PAGE", "1");
+      dispatch("set_products", state.active_page);
+    },
+    async edit_product({ commit, state }) {
+      await editProductById(state.form);
+      commit("UPDATE_PRODUCT", state.form);
+    },
+    async delete_product({ commit, dispatch, state }, id) {
+      await deleteProductById(id);
+      commit("SET_ACTIVE_PAGE", "1");
+      dispatch("set_products", state.active_page);
+    },
+    async set_sections({ commit }) {
+      const { items } = await getSections();
+      commit("SET_SECTIONS", items);
     },
     set_active_page({ commit }, page) {
       window.location.href = `/#/${page}`;
@@ -84,77 +87,8 @@ export default new Vuex.Store({
     set_filter_section({ commit }, filter_section) {
       commit("SET_FILTER_SECTION", filter_section);
     },
-    async set_form_edit({ commit }, data) {
+    set_form_edit({ commit }, data) {
       commit("SET_FORM_EDIT", data);
-    },
-    get_product_by_id({ commit }, id) {
-      fetch(`http://localhost:3000/produtos/${id}`)
-      .then(async response => {
-        const data = await response.json();
-        commit("SET_FORM_EDIT", data);
-      })
-      .catch(error => console.log(error));
-    },
-    add_product({ commit, state, dispatch }, product) {
-      return new Promise(resolve => {
-        fetch("http://localhost:3000/produtos", {
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          method: "POST",
-          body: JSON.stringify(product)
-        })
-          .then(response => {
-            if (response.ok) {
-              commit("SET_ACTIVE_PAGE", "1");
-              dispatch("set_products", state.active_page);
-            }
-            resolve(response.ok)
-          })
-          .catch(error => console.log(error))
-      })
-    },
-    edit_product({ commit, state }) {
-      return new Promise(resolve => {
-        const { form } = state;
-        fetch(`http://localhost:3000/produtos/${form.id}`, {
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          method: "PUT",
-          body: JSON.stringify(form)
-        })
-          .then(response => {
-            if (response.ok) {
-              commit('UPDATE_PRODUCT', form);
-            }
-            resolve(response.ok)
-          })
-          .catch(error => console.log(error))
-      })
-    },
-    delete_product({ commit, dispatch, state }, id) {
-      return new Promise(resolve => {
-        fetch(`http://localhost:3000/produtos/${id}`, {
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          method: "DELETE",
-          body: JSON.stringify({ id })
-        })
-          .then(response => {
-            console.log(response);
-            if (response.ok) {
-              commit("SET_ACTIVE_PAGE", "1");
-              dispatch("set_products", state.active_page);
-            }
-            resolve(response);
-          })
-          .catch(error => console.log(error))
-      })
     }
   },
   getters: {
