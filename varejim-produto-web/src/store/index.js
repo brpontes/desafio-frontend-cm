@@ -41,6 +41,9 @@ export default new Vuex.Store({
     SET_FORM_EDIT(state, data) {
       state.form = data;
     },
+    SET_FORM(state, form) {
+      state.form = form
+    },
     ADD_PRODUCT(state, product) {
       state.products = [...state.products, product];
     },
@@ -61,12 +64,14 @@ export default new Vuex.Store({
     },
     async add_product({ commit, state, dispatch }, product) {
       await addProduct(product);
+      commit("SET_FORM", { id: "", descricao: "", secao_id: "" });
       commit("SET_ACTIVE_PAGE", "1");
       dispatch("set_products", state.active_page);
     },
     async edit_product({ commit, state }) {
       await editProductById(state.form);
       commit("UPDATE_PRODUCT", state.form);
+      commit("SET_FORM", { id: "", descricao: "", secao_id: "" });
     },
     async delete_product({ commit, dispatch, state }, id) {
       await deleteProductById(id);
@@ -89,6 +94,9 @@ export default new Vuex.Store({
     },
     set_form_edit({ commit }, data) {
       commit("SET_FORM_EDIT", data);
+    },
+    set_form_clear({ commit }) {
+      commit("SET_FORM", { id: "", descricao: "", secao_id: "" });
     }
   },
   getters: {
