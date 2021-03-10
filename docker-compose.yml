@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+
+  varejim-produto-web:
+    container_name: varejim-produto-web
+    build:
+      context: .
+      dockerfile: ./dockers/front/Dockerfile
+    volumes:
+      - './varejim-produto-web:/app'
+    container_name: varejim-produto-web
+    ports:
+      - '80:8080'
+
+  varejim-produto-service:
+    container_name: varejim-produto-service
+    build:
+      context: .
+      dockerfile: ./dockers/back/Dockerfile
+    volumes:
+      - './varejim-produto-service:/app/back'
+    container_name: varejim-produto-service
+    ports:
+      - '3000:3000'
