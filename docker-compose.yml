@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: ./dockers/front/Dockerfile
-    volumes:
-      - './varejim-produto-web:/app'
     container_name: varejim-produto-web
     environment:
       - VUE_APP_HOST_API_URL=http://localhost
@@ -21,8 +19,6 @@ services:
     build:
       context: .
       dockerfile: ./dockers/back/Dockerfile
-    volumes:
-      - './varejim-produto-service:/app/back'
     container_name: varejim-produto-service
     ports:
       - '3000:3000'
