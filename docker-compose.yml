@@ -10,6 +10,9 @@ services:
     volumes:
       - './varejim-produto-web:/app'
     container_name: varejim-produto-web
+    environment:
+      - VUE_APP_HOST_API_URL=http://localhost
+      - VUE_APP_HOST_API_PORT=3000
     ports:
       - '8080:8080'
 
