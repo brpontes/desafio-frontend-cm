@@ -3,7 +3,7 @@
     class="filter"
     v-model="filter"
     type="text"
-    placeholder="Digite aqui o código do produto"
+    placeholder="Digite aqui o código ou a descrição do produto"
     @keyup="filterByProductCod"
   />
 </template>
@@ -19,9 +19,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["set_filter"]),
+    ...mapActions(["set_products", "get_filtered_products"]),
     filterByProductCod() {
-      this.set_filter(this.filter);
+      if (this.filter === "") {
+        this.set_products();
+        return;
+      }
+      this.get_filtered_products(this.filter);
     }
   }
 };

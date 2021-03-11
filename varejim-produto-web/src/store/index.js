@@ -1,6 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { getProducts, getProductById, addProduct, editProductById, deleteProductById } from "@/api/products";
+import {
+  getProducts,
+  getProductById,
+  addProduct,
+  editProductById,
+  deleteProductById,
+  getFilteredProducts } from "@/api/products";
 import { getSections } from "@/api/sections";
 
 Vue.use(Vuex);
@@ -55,6 +61,11 @@ export default new Vuex.Store({
     async set_products({ commit, state }, page) {
       const startRow = (page - 1) * state.pagination.limit;
       const { start, limit, total, items } = await getProducts(startRow);
+      commit("SET_PRODUCTS", items);
+      commit("SET_PAGINATION", { start, limit, total });
+    },
+    async get_filtered_products({ commit }, filter) {
+      const { start, limit, total, items } = await getFilteredProducts(filter);
       commit("SET_PRODUCTS", items);
       commit("SET_PAGINATION", { start, limit, total });
     },

@@ -1,9 +1,19 @@
-const baseUrl = "http://localhost:3000/produtos";
+const { VUE_APP_HOST_API_URL, VUE_APP_HOST_API_PORT } = process.env;
+const baseUrl = `${VUE_APP_HOST_API_URL}:${VUE_APP_HOST_API_PORT}/produtos`;
 const headers = { "Accept": "application/json", "Content-Type": "application/json" };
 
 export function getProducts(start) {
   return new Promise((resolve, reject) => {
     fetch(`${baseUrl}?start=${start}`)
+      .then(response => resolve(response.json()))
+      .catch(error => reject(error));
+  });
+}
+
+export function getFilteredProducts(filter) {
+  const fieldToSearch = isNaN(filter) ? "descricao" : "id";
+  return new Promise((resolve, reject) => {
+    fetch(`${baseUrl}?${fieldToSearch}=${filter}`)
       .then(response => resolve(response.json()))
       .catch(error => reject(error));
   });

@@ -30,7 +30,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['set_products', 'set_sections']),
+    ...mapActions(['set_sections']),
     toggleMenu() {
       this.menu_open = !this.menu_open
     }
