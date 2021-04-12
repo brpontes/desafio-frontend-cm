@@ -53,4 +53,13 @@ describe('Counter', () => {
     expect(p.exists()).toBeFalsy()
   })
 
+  test('Caso não informe a propriedade products, deve ser um array vazio', () => {
+    wrapper = shallowMount(Counter, {
+      store,
+      localVue,
+    })
+
+    expect(wrapper.vm.products).toEqual([])
+  })
+
 })
