@@ -27,7 +27,7 @@
     <div>Os campos com <span class="required">*</span> são obrigatórios</div>
     <div class="btn-group">
       <button v-if="edit" type="button" class="danger-bg" @click="promptRemoveProduct(form.id)">Excluir</button>
-      <button v-if="edit" type="button" name="edit-product" class="success-bg" @click="editProduct">Cadastrar</button>
+      <button v-if="edit" type="button" name="edit-product" class="success-bg" @click="editProduct">Editar</button>
       <button v-if="!edit" type="button" name="add-product" @click="addProduct">Cadastrar</button>
     </div>
   </form>

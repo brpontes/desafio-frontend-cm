@@ -1,20 +1,33 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
-import VueRouter from "vue-router";
 import VueSwal from "vue-swal";
 import Form from '@/components/products/Form'
 import 'regenerator-runtime/runtime'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-localVue.use(VueSwal);
+localVue.use(VueSwal)
 localVue.use(Vuelidate)
-localVue.use(VueRouter)
-const router = new VueRouter()
 
 describe('Form', () => {
-  let wrapper, actions, store, state, setFormClearMock, getProductByIdMock, addProductMock
+  let wrapper,
+    actions,
+    store,
+    state,
+    setFormClearMock,
+    getProductByIdMock,
+    addProductMock,
+    editProductMock
+
+  const mocks = {
+    $route: {
+      params: { id: '123' }
+    },
+    $router: {
+      push: jest.fn()
+    }
+  }
 
   describe('Formulário de adição', () => {
 
@@ -141,19 +154,17 @@ describe('Form', () => {
     beforeEach(() => {
       setFormClearMock = jest.fn(() => {})
       getProductByIdMock = jest.fn(() => {
-        wrapper.setData({ form: { id: '123', descricao: 'Teste', secao_id: '123' } })
+        store.replaceState({
+          form: { id: '123', descricao: 'Esponja de aço', secao_id: '123' }
+        })
       })
-      addProductMock = jest.fn(() => {
-        wrapper.vm.$store.state.products = [
-          ...wrapper.vm.$store.state.products,
-          wrapper.vm.$store.state.form
-        ]
-      })
+      addProductMock = jest.fn(() => {})
+      editProductMock = jest.fn(() => {})
 
       actions = {
         set_form_clear: setFormClearMock,
         get_product_by_id: getProductByIdMock,
-        add_product: addProductMock
+        edit_product: editProductMock
       },
       state = {
         products: [{ id: '123', descricao: 'Esponja de aço', secao_id: '123' }],
@@ -161,20 +172,19 @@ describe('Form', () => {
         form: { id: '', descricao: '', secao_id: '' }
       },
       store = new Vuex.Store({
-        router,
+        mocks,
         actions,
         state
       })
-  
+
       wrapper = shallowMount(Form, {
-        router,
         store,
+        mocks,
         localVue,
         propsData: {
           edit: true
         }
       })
-      wrapper.vm.$route.params.id = '123'
       wrapper.vm.submitted = false
     })
   
@@ -234,34 +244,33 @@ describe('Form', () => {
       test('Ao carregar, deve chamar função que limpa o formulário e buscar um produto com id 123', async () => {
         expect(setFormClearMock).toHaveBeenCalled()
         expect(getProductByIdMock).toHaveBeenCalledTimes(1)
-        expect(wrapper.vm.form.id).toEqual('123')
+        expect(wrapper.vm.$store.state.form.id).toEqual('123')
       })
   
-      /* test('O formulário só pode ser submetido caso seja válido', async () => {
+      test('O formulário só pode ser submetido caso seja válido', async () => {
         wrapper.setData({
           form: { id: '12345', descricao: 'Esponja de aço', secao_id: '' }
         })
-        const button = wrapper.find('button[name=add-product]')
+        const button = wrapper.find('button[name=edit-product]')
         expect(button.exists()).toBeTruthy()
-        expect(button.text()).toBe('Cadastrar')
+        expect(button.text()).toBe('Editar')
         await button.trigger('click')
         expect(wrapper.vm.submitted).toBeTruthy()
         expect(wrapper.vm.$v.$invalid).toBeTruthy()
-        expect(addProductMock).toHaveBeenCalledTimes(0)
+        expect(editProductMock).toHaveBeenCalledTimes(0)
       })
   
-      test('Cadastra o produto quando o formulário é válido', async () => {
+      test('Edita o produto quando o formulário é válido', async () => {
         wrapper.setData({
-          form: { id: '12345', descricao: 'Esponja de aço', secao_id: '123' }
+          form: { id: '123', descricao: 'Esponja de aço 2', secao_id: '123' }
         })
-        const button = wrapper.find('button[name=add-product]')
+        const button = wrapper.find('button[name=edit-product]')
         expect(button.exists()).toBeTruthy()
-        expect(button.text()).toBe('Cadastrar')
+        expect(button.text()).toBe('Editar')
         await button.trigger('click')
         expect(wrapper.vm.$v.$invalid).toBeFalsy()
-        expect(addProductMock).toHaveBeenCalled()
-        expect(wrapper.vm.$store.state.products).toHaveLength(1)
-      }) */
+        expect(editProductMock).toHaveBeenCalledTimes(1)
+      })
     })
 
   })
