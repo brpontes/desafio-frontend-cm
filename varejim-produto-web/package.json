@@ -52,6 +52,7 @@
       "^@/(.*)$": "<rootDir>/src/$1"
     },
     "collectCoverage": true,
+    "coverageDirectory": "<rootDir>/tests/coverage",
     "collectCoverageFrom": [
       "**/*.{js,vue}",
       "!**/node_modules/**"
